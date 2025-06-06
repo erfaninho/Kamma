@@ -13,13 +13,13 @@ class Category (AbstractModel):
     """
         Create Category Model Using Abstract model
     """
-    GENDER = {
-        "Male" :"m",
-        "Female": "f",
-        "Unisex": "u",
-    }
-    name = models.CharField(_("anme"), max_length=255)
-    gender = models.Choices(GENDER)
+    class Genders (models.IntegerChoices):
+        FEMALE= 1, "FEMALE"
+        MALE= 2,"MALE"
+        UNISEX = 3,"UNISEX"
+    
+    name = models.CharField(_("name"), max_length=255)
+    gender = models.IntegerField(choices=Genders.choices)
     colors = ArrayField(models.IntegerField(), blank=True, default=list)
     materials = ArrayField(models.IntegerField(), blank=True, default=list)
 
@@ -95,7 +95,7 @@ class Product (AbstractModel):
     category = models.ForeignKey(Category, verbose_name=_("category"), on_delete=models.PROTECT, related_name="products")
     rate = models.FloatField(_("rate"), default=0.0)
     description = models.TextField(_("description"), blank=True, null=True)
-    image = models.FileField(upload_to=upload_file, max_length=255, null=True, blank=True)
+    image = models.FileField(upload_to="Products/", max_length=255, null=True, blank=True)
     price = models.PositiveIntegerField(_("price"))
 
     def __str__(self):
@@ -103,8 +103,8 @@ class Product (AbstractModel):
     
     class Meta:
         db_table = D.PRODUCT
-        versbose_name = _("product")
-        versbose_name_plural = _("products")
+        verbose_name = _("product")
+        verbose_name_plural = _("products")
 
 
 class ProductInstance (AbstractModel):
@@ -116,7 +116,7 @@ class ProductInstance (AbstractModel):
     stock = models.PositiveIntegerField(_("stock"))
     color = models.ForeignKey(Color, verbose_name=_("color"), on_delete=models.PROTECT, related_name="instances")
     size = models.ForeignKey(Size, verbose_name=_("size"), on_delete=models.PROTECT, related_name="instances")
-    product_id = models.CharField(_("product_id"), max_length=255)
+    p_id = models.CharField(_("p_id"), max_length=255)
 
 
 class ProductAlbum (AbstractModel):
