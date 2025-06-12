@@ -22,3 +22,36 @@ class S(D):
     FILE = "file"
     STOCK = "stock"
     P_ID = "p_id"
+    
+    """
+        Users App
+    """
+    
+    EMAIL = "email"
+    PHONE_NUMBER = "phone_number"
+    FIRST_NAME = "first_name"
+    LAST_NAME = "last_name"
+    VERIFIED_EMAIL = "verified_email"
+    VERIFIED_PHONE_NUMBER = "verified_phone_number"
+    ADDRESS = "address"
+    BIRTH_DATE = "birth_date"
+    PASSWORD = "password"
+    USER = "user"
+    TITLE = "title"
+    POST_CODE = "post_code"
+    STATE = "state"
+    CITY = "city"
+    LATITUDE = "latitude"
+    LONGITUDE = "longitude"
+    POSTAL_ADDRESS = "postal_address"
+    IS_DEFAULT = "is_default"
+    NUMBER = "number"
+    TOTAL_AMOUNT = "total_amount"
+    CART = "cart"
+    COUNT = "count"
+
+    """
+        Order App
+    """
+
+    
