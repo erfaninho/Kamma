@@ -26,11 +26,11 @@ class S(D):
     """
         Users App
     """
-    
     EMAIL = "email"
     PHONE_NUMBER = "phone_number"
     FIRST_NAME = "first_name"
     LAST_NAME = "last_name"
+    USERNAME = "username"
     VERIFIED_EMAIL = "verified_email"
     VERIFIED_PHONE_NUMBER = "verified_phone_number"
     ADDRESS = "address"
@@ -46,12 +46,15 @@ class S(D):
     POSTAL_ADDRESS = "postal_address"
     IS_DEFAULT = "is_default"
     NUMBER = "number"
+    IS_ACTIVE = "is_active"
     TOTAL_AMOUNT = "total_amount"
     CART = "cart"
     COUNT = "count"
+    PRODUCT_INSTANCE = "product_instace"
 
     """
         Order App
     """
-
-    
+    ORDER = "order"
+    ORDER_STATUS = "order_status"
+    SHIPPING_ADDRESS = "shipping_address"
