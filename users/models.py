@@ -76,7 +76,7 @@ class Address(AbstractModel):
                 old_address.is_default = False
                 old_address.save(updated_fields=[S.IS_DEFAULT])
         
-        return super().save(*args, **kwargs, update_fields=[S.IS_DEFAULT])
+        super().save(*args, **kwargs, update_fields=[S.IS_DEFAULT])
     
 
 class UserRandomNumber(AbstractModel):
