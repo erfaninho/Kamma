@@ -2,6 +2,8 @@ from django.db import models
 from django_autoutils.model_utils import AbstractModel
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
+import datetime
 from phonenumber_field.modelfields import PhoneNumberField
 
 from utils.default_string import S, D
@@ -14,10 +16,15 @@ class User(AbstractUser):
     """
         Model for users
     """
-    REQUIRED_FIELDS = ['username', 'email', 'phone_number', 'first_name', 'last_name']
+    class UserType(models.IntegerChoices):
+        DEVELOPER = 1, _("Developer")
+        ADMIN = 2, _("Admin")
+        CUSTOMER = 3, _("Customer")
+
+    REQUIRED_FIELDS = [S.EMAIL, S.PHONE_NUMBER, S.FIRST_NAME, S.LAST_NAME, S.USER_TYPE]
     first_name = models.CharField(_("first_name"), max_length=50)
     last_name = models.CharField(_("last_name"), max_length=50)
-    username = models.CharField(_("username"), max_length=50, unique=True)
+    user_type = models.IntegerField(_("user_type"), choices=UserType.choices, default=UserType.CUSTOMER)
 
     email = models.EmailField(_("email"), max_length=254, unique=True)
     verified_email = models.BooleanField(_("verified_email"), default=False)
@@ -42,8 +49,8 @@ class User(AbstractUser):
         verbose_name = _('user')
         verbose_name_plural = _('userS')
         constraints = [
-            models.UniqueConstraint(fields=[S.EMAIL], violation_error_message=_("User with this email already exists")),
-            models.UniqueConstraint(fields=[S.PHONE_NUMBER], violation_error_message=_("User with this phone number already exists"))
+            models.UniqueConstraint(name=f'{S.EMAIL}_Unique', fields=[S.EMAIL], violation_error_message=_("User with this email already exists")),
+            models.UniqueConstraint(name=f"{S.PHONE_NUMBER}_Unique", fields=[S.PHONE_NUMBER], violation_error_message=_("User with this phone number already exists"))
         ]
 
 
@@ -51,7 +58,7 @@ class Address(AbstractModel):
     """
         Address Model for user addresses
     """
-    user = models.ForeignKey(User, verbose_name=_("user"), on_delete=models.CASCADE, related_name="adresses")
+    user = models.ForeignKey(User, verbose_name=_("user"), on_delete=models.CASCADE, related_name="addresses")
     title = models.CharField(_("title"), max_length=255)
     post_code = models.CharField(_("post_code"), max_length=10)
     state = models.CharField(_("state"), max_length=50)
@@ -62,7 +69,7 @@ class Address(AbstractModel):
     is_default = models.BooleanField(_("is_default"), default=True)
 
     class Meta:
-        db_name = D.ADDRESS
+        db_table = D.ADDRESS
         verbose_name = _("address")
         verbose_name_plural = _("addresses")
     
@@ -70,13 +77,13 @@ class Address(AbstractModel):
         return f'{self.user}:{self.title}'
     
     def save(self, *args, **kwargs):
-        if self.pk is None:
+        if self.pk is not None:
             old_address = self.user.get_default_address().last()
             if old_address:
                 old_address.is_default = False
                 old_address.save(updated_fields=[S.IS_DEFAULT])
         
-        super().save(*args, **kwargs, update_fields=[S.IS_DEFAULT])
+        super().save(*args, **kwargs)
     
 
 class UserRandomNumber(AbstractModel):
@@ -86,20 +93,30 @@ class UserRandomNumber(AbstractModel):
 
     user = models.ForeignKey(User, verbose_name=_("user"), on_delete=models.CASCADE, related_name="user_random_numbers")
     is_active = models.BooleanField(_("is_active"), default=True)
-    number = models.CharField(_("number"), max_length=6)
+    number = models.CharField(_("number"), max_length=6, null=True, blank=True)
+    ttl = models.PositiveSmallIntegerField(_("ttl"), default=180)
+
+    def is_expired (self):
+        return timezone.now() > self.insert_dt + datetime.timedelta(seconds=self.ttl)
+    
+    def deactivate (self):
+        if self.is_active and self.is_expired():
+            self.is_active = False
+            self.save(updated_fields = [S.IS_ACTIVE])
 
     def save(self, *args, **kwargs):
-        number = ""
-        for i in range(6):
-            number = number+str(random.randint(0,9))
-        self.number = number
-        return super().save(*args, **kwargs, update_fields=[S.NUMBER])
+        if self.pk is None:
+            number = ""
+            for i in range(6):
+                number = number+str(random.randint(0,9))
+            self.number = number
+            super().save(*args, **kwargs)
     
     def __str__(self):
         return f'{self.user}:{self.number}'
     
     class Meta:
-        db_name = D.USER_RANDOM_NUMBER
+        db_table = D.USER_RANDOM_NUMBER
         verbose_name = _("user_random_number")
         verbose_name_plural = _("user_random_numbers")
 
@@ -122,7 +139,7 @@ class Cart(AbstractModel):
         self.save(*args, **kwargs,update_fields=[S.TOTAL_AMOUNT])
     
     class Meta:
-        db_name = D.CART
+        db_table = D.CART
         verbose_name = _("cart")
         verbose_name_plural = _("carts")
     
@@ -146,6 +163,6 @@ class CartItem(AbstractModel):
         super().save(*args, **kwargs, update_fields=[S.TOTAL_AMOUNT])
 
     class Meta:
-        db_name = D.CART_ITEM
+        db_table = D.CART_ITEM
         verbose_name = _("cart_item")
         verbose_name_plural = _("cart_items")
