@@ -50,7 +50,7 @@ class ProductInstaceInline (admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = [S.NAME, S.CATEGORY, S.RATE, S.PRICE, 'in_stock']
+    list_display = [S.NAME, S.CATEGORY, S.RATE, S.PRICE, S.MATERIAL, 'in_stock']
     search_fields = [S.NAME, S.CATEGORY]
     list_filter = [S.CATEGORY, S.PRICE, S.RATE]
 
@@ -64,7 +64,7 @@ class ProductAdmin(admin.ModelAdmin):
     
     fieldsets = (
         (None, {
-            'fields': (S.NAME, S.CATEGORY, S.RATE, S.PRICE, S.DESCRIPTION, S.IMAGE)
+            'fields': (S.NAME, S.CATEGORY, S.RATE, S.PRICE, S.MATERIAL, S.DESCRIPTION, S.IMAGE)
         }),
     )
 

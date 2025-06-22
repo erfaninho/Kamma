@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'colorfield',
     'drf_yasg',
+    'django_filters',
 
     'orders',
     'products',
@@ -81,6 +82,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kammalabel.wsgi.application'
 
+AUTH_USER_MODEL = 'users.User' 
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
