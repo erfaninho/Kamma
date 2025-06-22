@@ -47,10 +47,13 @@ class S(D):
     IS_DEFAULT = "is_default"
     NUMBER = "number"
     IS_ACTIVE = "is_active"
+    TTL = "ttl"
     TOTAL_AMOUNT = "total_amount"
     CART = "cart"
     COUNT = "count"
-    PRODUCT_INSTANCE = "product_instace"
+    PRODUCT_INSTANCE = "product_instance"
+    USER_TYPE = "user_type"
+
 
     """
         Order App
@@ -58,3 +61,8 @@ class S(D):
     ORDER = "order"
     ORDER_STATUS = "order_status"
     SHIPPING_ADDRESS = "shipping_address"
+
+    """
+        Views
+    """
+    CONTEXT = "context"

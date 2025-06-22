@@ -97,6 +97,7 @@ class Product (AbstractModel):
     description = models.TextField(_("description"), blank=True, null=True)
     image = models.FileField(upload_to="Products/", max_length=255, null=True, blank=True)
     price = models.PositiveIntegerField(_("price"))
+    material =  models.ForeignKey(Material, verbose_name=_("material"), on_delete=models.PROTECT, related_name="products")
 
     def __str__(self):
         return self.name
@@ -117,6 +118,15 @@ class ProductInstance (AbstractModel):
     color = models.ForeignKey(Color, verbose_name=_("color"), on_delete=models.PROTECT, related_name="instances")
     size = models.ForeignKey(Size, verbose_name=_("size"), on_delete=models.PROTECT, related_name="instances")
     p_id = models.CharField(_("p_id"), max_length=255)
+
+    class Meta:
+        db_table = D.PRODUCT_INSTANCES
+        verbose_name = _("product_instance")
+        verbose_name_plural = _("product_instances")
+
+    def __str__(self):
+        return self.p_id
+    
 
 
 class ProductAlbum (AbstractModel):
