@@ -54,6 +54,7 @@ class S(D):
     PRODUCT_INSTANCE = "product_instance"
     USER_TYPE = "user_type"
 
+
     """
         Order App
     """
@@ -65,5 +66,3 @@ class S(D):
         Views
     """
     CONTEXT = "context"
-
-
