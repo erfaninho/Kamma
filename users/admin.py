@@ -36,7 +36,7 @@ class UserRandomNumberAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields' : (S.USER, S.NUMBER, S.IS_ACTIVE)
+            'fields' : (S.USER, S.NUMBER, S.IS_ACTIVE, S.TTL)
         }),
     )
 
