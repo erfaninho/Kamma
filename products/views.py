@@ -8,8 +8,8 @@ from rest_framework.response import Response
 
 from .models import Category, Product, ProductInstance
 from .filters import ProductFilter
-from .serializers import ProductiInstanceSerializer, ProductSerializer, CatogorySerializer, MaterialSerializer, \
-    SizeSerializer
+from .serializers import ProductSerializer, CategorySerializer, ProductDetailSerializer
+    
 from utils.default_string import T, S
 from utils.views import RetrieveMixin #, PostMixin, DestroyMixin
 
@@ -21,7 +21,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet, RetrieveMixin):
     queryset = Category.objects.all()
     permission_classes = [AllowAny]
 
-    serializer_class = CatogorySerializer
+    serializer_class = CategorySerializer
 
     def get_queryset(self):
         return super().get_queryset()
@@ -65,21 +65,13 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ProductSerializer
     filterset_class = ProductFilter
     permission_classes = [AllowAny]
-
-    def get_queryset(self):
-        if self.action == 'list':
-            return Product.objects.all()
-        if self.action == 'retrieve':
-            return Product.objects.all()
-        if self.action == 'search':
-            return Product.objects.all()
     
 
     def get_serializer_class(self):
         if self.action == 'list':
             return ProductSerializer
         if self.action == 'retrieve':
-            return ProductSerializer 
+            return ProductDetailSerializer 
         if self.action == 'search':
             return ProductSerializer
         

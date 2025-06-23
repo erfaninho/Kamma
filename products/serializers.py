@@ -18,16 +18,6 @@ class ProductAlbumSeializer (serializers.ModelSerializer):
         fields = [S.ID, S.PRODUCT, S.FILE]
 
 
-class CatogorySerializer (serializers.ModelSerializer):
-    """
-        Serializer Model for All categories
-    """
-
-    class Meta:
-        model = Category
-        fields = [S.ID, S.NAME, S.GENDER, S.COLORS, S.MATERIALS]
-
-
 class CategoryFilterSerializer (serializers.ModelSerializer):
     price_range = serializers.SerializerMethodField()
 
@@ -63,7 +53,7 @@ class SizeSerializer (serializers.ModelSerializer):
         fields = [S.NAME]
 
 
-class ProductiInstanceSerializer (serializers.ModelSerializer):
+class ProductInstanceSerializer (serializers.ModelSerializer):
     color = ColorSerializer()
     size = SizeSerializer()
 
@@ -74,13 +64,30 @@ class ProductiInstanceSerializer (serializers.ModelSerializer):
 
 
 class ProductSerializer (serializers.ModelSerializer):
-    category = CatogorySerializer()
+    material = MaterialSerializer()
+
+    class Meta:
+        model = Product
+        fields = [S.ID, S.NAME, S.PRICE, S.CATEGORY, S.RATE, S.IMAGE, S.MATERIAL]
+
+
+class ProductDetailSerializer (serializers.ModelSerializer):
+    """
+        Serializer for single product detailed view
+    """
     material = MaterialSerializer()
     album = ProductAlbumSeializer(many=True, read_only=True)
-    instances = ProductiInstanceSerializer(many=True, read_only=True)
+    instances = ProductInstanceSerializer(many=True, read_only=True)
 
     class Meta:
         model = Product
         fields = [S.ID, S.NAME, S.PRICE, S.CATEGORY, S.DESCRIPTION, S.RATE, S.IMAGE, S.MATERIAL, S.ALBUM, 'instances']
 
-
+class CategorySerializer (serializers.ModelSerializer):
+    """
+        Serializer Model for All categories
+    """
+    products = ProductSerializer(many=True, read_only=True)
+    class Meta:
+        model = Category
+        fields = [S.ID, S.NAME, S.GENDER, S.COLORS, S.MATERIALS, 'products']
