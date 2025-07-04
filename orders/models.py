@@ -19,6 +19,7 @@ class Order (AbstractModel):
         SHIPPED = 3, _("Shipped")
         COMPLETED = 4, _("Completed")
         CANCELLED = 5, _("Cancelled")
+        FAILED = 6, _("Failed")
 
     user = models.ForeignKey(User, verbose_name=_("user"), on_delete=models.SET_NULL, related_name="orders", null=True)
     order_status = models.IntegerField(choices=OrderStatus.choices, default=OrderStatus.PENDING)
@@ -65,3 +66,21 @@ class OrderItem(AbstractModel):
         db_table = D.ORDER_ITEM
         verbose_name = _("order_item")
         verbose_name_plural = _("order_items")
+
+
+class Payment(AbstractModel):
+    """
+        Payment Model to Store User Payments
+    """
+    class PaymentStatus(models.IntegerChoices):
+        NEW = 1, _("New")
+        FAILED = 2, _("Failed")
+        SUCCESSFUL = 3, _("Successful")
+
+    user = models.ForeignKey(User, verbose_name=_("user"), null=True, on_delete=models.SET_NULL, related_name='payments') 
+    order = models.OneToOneField(Order, verbose_name=_("order"), on_delete=models.PROTECT, related_name='payment')
+    payment_status = models.IntegerField(choices=PaymentStatus.choices, default=PaymentStatus.NEW)
+
+    def __str__(self):
+        return f'{self.user}:{self.order}'
+

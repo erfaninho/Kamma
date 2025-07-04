@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'colorfield',
     'drf_yasg',
     'django_filters',
+    'constance',
+    'constance.backends.database',
 
     'orders',
     'products',
@@ -151,3 +153,35 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+
+CONSTANCE_CONFIG = {
+    'USER_TOKEN_EXPIRE_DAY': (7, 'Number of days before user token expires', int),
+    'USER_TEMP_TOKEN_EXPIRE_MINUTE': (30, 'Number of minutes before temporary token expires', int),
+    'USER_RANDOM_NUMBER_LENGTH': (6, 'Length of User random Number', int),
+    'USER_TOKEN_LENGTH': (32, 'Length of User Token', int),
+
+    'USER_WRONG_ATTEMPTS_MAX': (5, 'Number of Wrong Random Number Tries', int),
+}
+
+CONSTANCE_CONFIG_FIELDSETS = {
+    "User Configs": {
+        "fields": ("USER_TOKEN_LENGTH", "USER_TOKEN_EXPIRE_DAY", "USER_TEMP_TOKEN_EXPIRE_MINUTE",
+                   "USER_RANDOM_NUMBER_LENGTH", "USER_WRONG_ATTEMPTS_MAX"),
+        "collapse": False
+    },
+}
+
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': "JWT or Token-based authentication. Format: `Bearer <token>`",
+        }
+    },
+    'USE_SESSION_AUTH': False,
+}
