@@ -21,5 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('docs/', include('kammalabel.docs')),
     path('v1/product/', include('products.urls')),
+    path('v1/order/', include('orders.urls')),
+    path('v1/users/', include('users.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
 ]

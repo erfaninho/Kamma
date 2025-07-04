@@ -11,7 +11,8 @@ class UserAdmin (admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields' : (S.FIRST_NAME, S.LAST_NAME, S.USERNAME, S.EMAIL, S.VERIFIED_EMAIL, S.PHONE_NUMBER, S.VERIFIED_PHONE_NUMBER, S.BIRTH_DATE )
+            'fields' : (S.FIRST_NAME, S.LAST_NAME, S.USERNAME, S.EMAIL, S.VERIFIED_EMAIL,
+                         S.PHONE_NUMBER, S.VERIFIED_PHONE_NUMBER, S.BIRTH_DATE )
         }),
     )
 
@@ -31,15 +32,30 @@ class AddressAdmin(admin.ModelAdmin):
 
 @admin.register(UserRandomNumber)
 class UserRandomNumberAdmin(admin.ModelAdmin):
-    list_display = [S.USER, S.NUMBER, S.IS_ACTIVE]
+    list_display = [S.USER, S.NUMBER, S.IS_ACTIVE, S.WRONG_ATTEMPTS]
     search_fields = [S.USER]
 
     fieldsets = (
         (None, {
-            'fields' : (S.USER, S.NUMBER, S.IS_ACTIVE, S.TTL)
+            'fields' : (S.USER, S.NUMBER, S.IS_ACTIVE, S.TTL, S.WRONG_ATTEMPTS)
         }),
     )
 
+
+@admin.register(UserToken)
+class UserTokenAdmin(admin.ModelAdmin):
+    list_display = [S.USER, S.EXPIRE_DT]
+    search_fields = [S.USER]
+    list_filter = [S.IS_ACTIVE]
+
+    fieldsets = (
+        (None, {
+            "fields": (
+                S.USER, S.IS_ACTIVE, S.EXPIRE_DT, S.TOKEN,
+            ),
+        }),
+    )
+    
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):

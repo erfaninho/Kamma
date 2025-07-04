@@ -6,6 +6,13 @@ from .db_names import D
 
 
 class S(D):
+    """
+        General
+    """
+    UPDATE_DT = "update_dt"
+    INSERT_DT = "insert_dt"
+    REQUEST = "request"
+    VIEW = "view"
     
     """
         Procuts App
@@ -48,12 +55,23 @@ class S(D):
     NUMBER = "number"
     IS_ACTIVE = "is_active"
     TTL = "ttl"
+    WRONG_ATTEMPTS = "wrong_attempts"
     TOTAL_AMOUNT = "total_amount"
     CART = "cart"
     COUNT = "count"
     PRODUCT_INSTANCE = "product_instance"
     USER_TYPE = "user_type"
-
+    EXPIRE_DT = "expire_dt"
+    TOKEN = "token"
+    IS_TEMP = "is_temp"
+    KEY = "key"
+    TITLE = "title"
+    SEND_CODE_TYPE = "send_code_type"
+    RANDOM_NUMBER = "random_number"
+    RANDOM_KEY = "random_key"
+    RECEIVER = "receiver"
+    SESSION = "session"
+    SESSION_CART = "session_cart"
 
     """
         Order App
@@ -61,6 +79,7 @@ class S(D):
     ORDER = "order"
     ORDER_STATUS = "order_status"
     SHIPPING_ADDRESS = "shipping_address"
+    PAYMENT_STATUS = "payment_status"
 
     """
         Views
